@@ -19,7 +19,7 @@
  
 [![Frontend](https://img.shields.io/badge/Frontend-Next.js%2014-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![Backend](https://img.shields.io/badge/Backend-Python%20%2B%20FastAPI-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
-[![Database](https://img.shields.io/badge/Database-PostgreSQL-4169E1?style=for-the-badge&logo=postgresql)](https://postgresql.org)
+[![Database](https://img.shields.io/badge/Database-SQLite-003B57?style=for-the-badge&logo=sqlite)](https://sqlite.org)
 [![Language](https://img.shields.io/badge/Backend%20Language-Python%203.11-3776AB?style=for-the-badge&logo=python)](https://python.org)
 [![Styling](https://img.shields.io/badge/Styling-Tailwind%20CSS-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com)
  
@@ -48,6 +48,8 @@ VoyageIQ is an AI-powered travel intelligence platform that takes the stress out
 The platform uses machine learning to predict when flight prices are about to rise, generates personalised budget plans based on your destination and group size, and builds complete day-by-day itineraries with flights, accommodation, food, and activities.
  
 > **This is a monorepo** — the frontend and backend both live inside this single repository.
+
+**Current backend:** the local MVP supports account registration and login, private trip management, and saved starter budget plans. Flight search, price prediction, bookings, and AI planning are later integrations.
  
 ---
  
@@ -81,8 +83,7 @@ The platform uses machine learning to predict when flight prices are about to ri
 |---|---|
 | Python 3.11 | Primary backend language |
 | FastAPI | High-performance REST API framework with auto-generated docs |
-| Prisma (Python) | Type-safe database ORM with schema migrations |
-| PostgreSQL | Primary relational database |
+| SQLite | Local database for the backend MVP |
 | PyJWT + bcrypt | Authentication and password hashing |
 | Amadeus SDK (Python) | Live flight search and pricing |
 | python-dotenv | Environment variable management |
@@ -94,7 +95,7 @@ The platform uses machine learning to predict when flight prices are about to ri
 | GitHub Actions | CI — lints and builds every PR automatically |
 | Vercel | Frontend hosting (auto-deploys on push to main) |
 | Render | Backend hosting (auto-deploys on push to main) |
-| Supabase | Managed PostgreSQL database |
+| PostgreSQL | Planned production database; local MVP currently uses SQLite |
  
 ---
  
@@ -109,7 +110,6 @@ Make sure you have these installed before starting:
 - **Git** — [git-scm.com](https://git-scm.com)
 - **Git Bash** (Windows only) — installed with Git above
 - **VS Code or PyCharm** — your code editor
-- **A Supabase account** — free PostgreSQL database at [supabase.com](https://supabase.com)
  
 ### 1. Clone the Repository
  
@@ -165,12 +165,7 @@ Open each file and fill in the values — ask the lead for real API keys.
  
 ### 6. Set Up the Database
  
-```bash
-cd ../backend
-prisma migrate dev
-```
- 
-This creates all the database tables. You only need to run this once (and again whenever the schema changes).
+The backend creates its local SQLite database and tables automatically the first time it starts. The database file is `backend/voyageiq.db`.
  
 ### 7. Start the Project
  
@@ -215,14 +210,13 @@ Quick overview:
 |---|---|---|
 | `POST` | `/api/auth/register` | Create a new account |
 | `POST` | `/api/auth/login` | Log in and receive a JWT token |
-| `GET` | `/api/flights/search` | Search flights by route and date |
-| `GET` | `/api/flights/predict-search` | Search flights with rise/fall price prediction |
-| `POST` | `/api/flights/predict` | Get a price prediction for a given flight |
+| `GET` | `/api/flights/search` | Search Amadeus flight offers by route and date |
 | `POST` | `/api/budget/calculate` | Generate a budget breakdown |
-| `POST` | `/api/budget/save` | Save a budget plan to the database |
-| `GET` | `/api/budget/{trip_id}` | Retrieve a saved budget plan |
+| `POST` | `/api/trips/{trip_id}/budget` | Save a budget plan to a trip |
+| `GET` | `/api/trips/{trip_id}/budget` | Retrieve a trip's saved budget plan |
 | `GET` | `/api/trips` | Get all trips for the logged-in user |
 | `POST` | `/api/trips` | Create a new trip |
+| `GET` | `/api/trips/{id}` | Get one trip |
 | `PUT` | `/api/trips/{id}` | Update a trip |
 | `DELETE` | `/api/trips/{id}` | Delete a trip |
 | `GET` | `/api/trips/{id}/items` | List all itinerary items for a trip |
@@ -241,7 +235,7 @@ Quick overview:
 |---|---|---|
 |  Frontend | [Vercel](https://vercel.com) | Auto-deploys when `main` is updated |
 |  Backend | [Render](https://render.com) | Auto-deploys when `main` is updated |
-|  Database | [Supabase](https://supabase.com) | Managed PostgreSQL — always on |
+|  Database | SQLite locally | Use a hosted PostgreSQL database before production deployment |
  
 ### Deploy Settings
  
@@ -249,10 +243,7 @@ Quick overview:
 - Root Directory: `frontend`
 - Framework: Next.js
  
-**Render (Backend)**
-- Root Directory: `backend`
-- Build Command: `pip install -r requirements.txt && prisma generate`
-- Start Command: `uvicorn app.main:app --host 0.0.0.0 --port 4000`
+The current backend is for local development. Before deploying it, switch the SQLite database to hosted PostgreSQL and configure a production `JWT_SECRET` and external service credentials.
  
 >  Never push directly to `main`. Merge `dev` → `main` only when a version is stable and tested.
  
