@@ -14,7 +14,7 @@ The API documentation is at http://localhost:4000/docs and the health endpoint i
 
 For local development, the server has a fallback secret. Before deploying, copy .env.example to .env and set JWT_SECRET to a long, unique secret. Do not commit .env.
 
-To enable flight search, create a Self-Service app in the Amadeus for Developers portal and copy its test API key and secret into AMADEUS_CLIENT_ID and AMADEUS_CLIENT_SECRET in backend/.env. The test API base is already configured. Restart the server after changing .env.
+To enable flight search, create a Duffel test access token and put it in `backend/.env` as `DUFFEL_ACCESS_TOKEN=your_test_token`. Keep the token private and never put it in the frontend or commit it. Restart the server after changing `.env`. Duffel test mode uses simulated flight inventory and prices.
 
 ## Use the protected trip endpoints
 

@@ -28,7 +28,7 @@ from app.schemas import (
     UserPublic,
 )
 from app.security import create_access_token, hash_password, read_access_token, verify_password
-from app.services.amadeus import FlightProviderError, amadeus_client
+from app.services.duffel import FlightProviderError, duffel_client
 
 
 app = FastAPI(title="VoyageIQ Backend", version="1.0.0")
@@ -187,7 +187,7 @@ async def search_flights(
         parameters["returnDate"] = return_date.isoformat()
 
     try:
-        results = await amadeus_client.search_flights(parameters)
+        results = await duffel_client.search_flights(parameters)
     except FlightProviderError as exc:
         raise HTTPException(status_code=exc.status_code, detail=str(exc)) from exc
 
