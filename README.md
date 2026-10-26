@@ -85,7 +85,7 @@ The platform uses machine learning to predict when flight prices are about to ri
 | FastAPI | High-performance REST API framework with auto-generated docs |
 | SQLite | Local database for the backend MVP |
 | PyJWT + bcrypt | Authentication and password hashing |
-| Amadeus SDK (Python) | Live flight search and pricing |
+| Duffel API (test mode) | Simulated flight search and pricing for development |
 | python-dotenv | Environment variable management |
 | httpx | Async HTTP client for external service calls |
  
@@ -210,7 +210,7 @@ Quick overview:
 |---|---|---|
 | `POST` | `/api/auth/register` | Create a new account |
 | `POST` | `/api/auth/login` | Log in and receive a JWT token |
-| `GET` | `/api/flights/search` | Search Amadeus flight offers by route and date |
+| `GET` | `/api/flights/search` | Search Duffel test offers by route and date |
 | `POST` | `/api/budget/calculate` | Generate a budget breakdown |
 | `POST` | `/api/trips/{trip_id}/budget` | Save a budget plan to a trip |
 | `GET` | `/api/trips/{trip_id}/budget` | Retrieve a trip's saved budget plan |

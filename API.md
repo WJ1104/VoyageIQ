@@ -23,7 +23,7 @@ Passwords are hashed before storage. Trip and budget routes are scoped to the si
 
 ## Flights
 
-Flight search requires Amadeus API credentials in backend/.env. Requests use three-letter IATA airport or city codes. The test API uses a limited dataset, so some routes and dates may return no offers.
+Flight search requires a Duffel test access token in `backend/.env` as `DUFFEL_ACCESS_TOKEN`. Requests use three-letter IATA airport or city codes. Duffel test mode uses simulated flight inventory and prices, so results are for development rather than real trip planning.
 
 | Method | Route | Access | Purpose |
 |---|---|---|---|
