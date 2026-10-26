@@ -1,8 +1,10 @@
 """Asynchronous client for Duffel's test-mode flight search."""
 
 import os
+from pathlib import Path
 
 import httpx
+from dotenv import dotenv_values
 
 
 class FlightProviderError(Exception):
@@ -15,7 +17,11 @@ class DuffelClient:
     base_url = "https://api.duffel.com"
 
     def __init__(self):
-        self.access_token = os.getenv("DUFFEL_ACCESS_TOKEN", "").strip()
+        token = os.getenv("DUFFEL_ACCESS_TOKEN", "").strip()
+        if not token:
+            env_file = Path(__file__).resolve().parents[1] / ".env"
+            token = (dotenv_values(env_file).get("DUFFEL_ACCESS_TOKEN") or "").strip()
+        self.access_token = token
 
     async def search_flights(self, parameters: dict) -> dict:
         if not self.access_token:
