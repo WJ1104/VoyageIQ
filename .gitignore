@@ -10,6 +10,9 @@ backend/node_modules/
 frontend/frontend.env
 backend/.env
 backend/backend.env
+backend/voyageiq.db
+__pycache__/
+*.py[cod]
 
 # Build outputs
 .next/
